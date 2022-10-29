@@ -1,6 +1,7 @@
-const { searchAllProducts, searchByProductId } = require('./productModels');
+const { searchAllProducts, searchByProductId, createProduct } = require('./productModels');
 
 module.exports = {
   searchAllProducts,
   searchByProductId,
+  createProduct,
 };

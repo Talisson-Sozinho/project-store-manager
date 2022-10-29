@@ -8,9 +8,14 @@
     "method": "GET",
     "sortNum": 0,
     "created": "2022-10-28T22:15:56.284Z",
-    "modified": "2022-10-29T01:44:08.084Z",
+    "modified": "2022-10-29T05:40:24.663Z",
     "headers": [],
     "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n \"name\": \"agora vai essa porar\"\n}",
+      "form": []
+    },
     "tests": []
   }
 ]

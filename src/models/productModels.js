@@ -11,7 +11,14 @@ const searchByProductId = async (id) => {
   return result;
 };
 
+const createProduct = async (name) => {
+  const [{ insertId }] = await dataBaseConnection
+    .execute('INSERT INTO StoreManager.products (name) VALUES (?)', [name]);
+  return insertId;
+};
+
 module.exports = {
   searchAllProducts,
   searchByProductId,
+  createProduct,
 };
