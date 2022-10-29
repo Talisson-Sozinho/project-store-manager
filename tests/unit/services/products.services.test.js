@@ -41,5 +41,18 @@ describe('Testes de unidade do service de products', function () {
 
   });
 
+  it('Deve retornar um objeto com o nome e id do produto inserido', async function () {
+    sinon.stub(models, 'createProduct').resolves(4);
+    const newProductName = 'new product';
+    const newProduct = {
+      id: 4,
+      name: newProductName,
+    }
+
+    const result = await services.createNewProduct(newProductName);
+
+    expect(result).to.deep.equal(newProduct)
+  })
+
   afterEach(sinon.restore);
 });

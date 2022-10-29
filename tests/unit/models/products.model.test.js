@@ -22,6 +22,18 @@ describe('Testes de unidade do model de products', function () {
     const result = await models.searchByProductId(999);
 
     expect(result).to.equal(products[0]);
+  });
+
+  it('Realizando uma inserção de um produto', async function () {
+    sinon.stub(connection, 'execute').resolves([{insertId: 4}]);
+
+    const productForInsert = {
+      name: 'new product',
+    }
+
+    const result = await models.createProduct(productForInsert);
+
+    expect(result).to.equal(4);
   })
 
   afterEach(sinon.restore);
