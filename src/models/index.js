@@ -5,7 +5,7 @@ const {
   verifyIds,
 } = require('./productModels');
 
-const { registerSale, createSalesProduct } = require('./salesModels');
+const { registerSale, createSalesProduct, getAllSales, getSalesById } = require('./salesModels');
 
 module.exports = {
   verifyIds,
@@ -14,4 +14,6 @@ module.exports = {
   createProduct,
   registerSale,
   createSalesProduct,
+  getAllSales,
+  getSalesById,
 };

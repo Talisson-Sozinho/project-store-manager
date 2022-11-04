@@ -24,6 +24,20 @@ const createNewSales = async (arrayOfSales) => {
   };
 };
 
+const getAllSales = async () => {
+  const sales = await models.getAllSales();
+  return sales;
+};
+
+const getSalesById = async (id) => {
+  const sales = await models.getSalesById(id);
+  if (sales.length === 0) throw errorObject(NOT_FOUND, 'Sale not found');
+
+  return sales;
+};
+
 module.exports = {
   createNewSales,
+  getAllSales,
+  getSalesById,
 };

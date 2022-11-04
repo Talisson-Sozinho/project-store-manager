@@ -1,3 +1,4 @@
+const camelize = require('camelize');
 const dataBaseConnection = require('./db/connection');
 
 const registerSale = async () => {
@@ -15,7 +16,31 @@ const createSalesProduct = async (arrayOfProducts) => {
   return affectedRows;
 };
 
+const getAllSales = async () => {
+  const [result] = await dataBaseConnection.execute(`
+    SELECT sales.sale_id, sales.product_id, sales.quantity, saleTime.date
+    FROM StoreManager.sales_products as sales
+    LEFT JOIN StoreManager.sales as saleTime
+    ON sales.sale_id = saleTime.id
+    ORDER BY sales.sale_id;`);
+
+  return camelize(result);
+};
+
+const getSalesById = async (id) => {
+  const [sales] = await dataBaseConnection.execute(`
+    SELECT sales.product_id, sales.quantity, saleTime.date FROM StoreManager.sales_products as sales
+    LEFT JOIN StoreManager.sales as saleTime
+    ON sales.sale_id = saleTime.id
+    WHERE sales.sale_id = (?)
+    ORDER BY sales.sale_id;`, [id]);
+
+  return camelize(sales);
+};
+
 module.exports = {
   registerSale,
   createSalesProduct,
+  getAllSales,
+  getSalesById,
 };
