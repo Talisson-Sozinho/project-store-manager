@@ -1,21 +1,4 @@
-const salesServiceReturn = {
-  id: 6,
-  itemsSold: [
-    {
-      productId: 1,
-      quantity: 1
-    },
-    {
-      productId: 2,
-      quantity: 5
-    },
-    {
-      productId: 3,
-      quantity: 4
-    }
-  ],
-}
-const salesServiceResponse = [
+const sales = [
   {
     saleId: 1,
     productId: 1,
@@ -52,7 +35,6 @@ const salesId1 = [
 ]
 
 module.exports = {
-  salesServiceReturn,
-  salesServiceResponse,
+  sales,
   salesId1,
 }
