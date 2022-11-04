@@ -8,10 +8,11 @@ const registerSale = async () => {
 
 const createSalesProduct = async (arrayOfProducts) => {
   const values = arrayOfProducts.join(', ');
-  await dataBaseConnection
+  const [{ affectedRows }] = await dataBaseConnection
     .execute(
       `INSERT INTO StoreManager.sales_products (product_id, sale_id, quantity) VALUES ${values}`,
-    );
+  );
+  return affectedRows;
 };
 
 module.exports = {

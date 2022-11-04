@@ -25,7 +25,7 @@ describe('Testes de unidade do model de products', function () {
   });
 
   it('Realizando uma inserção de um produto', async function () {
-    sinon.stub(connection, 'execute').resolves([{insertId: 4}]);
+    sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
 
     const productForInsert = {
       name: 'new product',
@@ -34,6 +34,20 @@ describe('Testes de unidade do model de products', function () {
     const result = await models.createProduct(productForInsert);
 
     expect(result).to.equal(4);
+  });
+
+    it('Realizando a verificação da existência de um array de ids no banco', async () => {
+    sinon.stub(connection, 'execute')
+      .onFirstCall().resolves([[{ result: 3 }]])
+      .onSecondCall().resolves([[{ result: 2}]]);
+
+    const result = await models.verifyIds([1, 2, 3]);
+
+    expect(result).to.be.true;
+
+    const result2 = await models.verifyIds([1, 2, 3]);
+
+    expect(result2).to.be.false;
   })
 
   afterEach(sinon.restore);
