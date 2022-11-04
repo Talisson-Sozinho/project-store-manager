@@ -4,18 +4,32 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3000/products",
-    "url": "http://localhost:3000/sales",
-    "method": "GET",
+    "url": "http://localhost:3000/products/2",
+    "method": "PUT",
     "sortNum": 0,
     "created": "2022-10-28T22:15:56.284Z",
-    "modified": "2022-11-04T22:10:15.758Z",
+    "modified": "2022-11-04T23:33:30.956Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "[\n  {\n    \"productId\": 1,\n    \"quantity\": 1\n  },\n  {\n    \"productId\": 2,\n    \"quantity\": 5\n  },\n    {\n    \"productId\": 3,\n    \"quantity\": 5\n  }\n]",
+      "raw": "{\n  \"name\": \"agora s sim\"\n}",
       "form": []
     },
+    "tests": []
+  },
+  {
+    "_id": "d9f0b6cf-b756-4e13-8336-71bff52bf3e0",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:3000/products/",
+    "url": "http://localhost:3000/products/",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-11-04T23:23:21.167Z",
+    "modified": "2022-11-04T23:33:14.001Z",
+    "headers": [],
+    "params": [],
     "tests": []
   }
 ]

@@ -24,9 +24,19 @@ const createProduct = async (name) => {
   return insertId;
 };
 
+const updateProductById = async (id, newName) => {
+  const [{ changedRows }] = await dataBaseConnection.execute(
+    'UPDATE StoreManager.products SET name = ? WHERE id = ?;',
+    [newName, id],
+  );
+
+  return changedRows;
+};
+
 module.exports = {
   searchAllProducts,
   searchByProductId,
   createProduct,
+  updateProductById,
   verifyIds,
 };
