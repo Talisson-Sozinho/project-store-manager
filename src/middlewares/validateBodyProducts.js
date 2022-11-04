@@ -1,15 +1,14 @@
-const { BAD_REQUEST, UNPROCESSABLE_ENTITY } = require('../helpers/errorHelper');
+const { BAD_REQUEST, UNPROCESSABLE_ENTITY, errorObject } = require('../helpers/errorHelper');
 
 module.exports = (req, _res, next) => {
   const { name } = req.body;
   if (!name) {
-    const err = new Error('"name" is required');
-    err.type = BAD_REQUEST;
+    const err = errorObject(BAD_REQUEST, '"name" is required');
     next(err);
   }
   if (name.length < 5) {
-    const err = new Error('"name" length must be at least 5 characters long');
-    err.type = UNPROCESSABLE_ENTITY;
+    const err = errorObject(UNPROCESSABLE_ENTITY,
+      '"name" length must be at least 5 characters long');
     next(err);
   }
   next();

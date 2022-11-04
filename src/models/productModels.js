@@ -11,6 +11,13 @@ const searchByProductId = async (id) => {
   return result;
 };
 
+const verifyIds = async (arrayOfIds) => {
+  const [[{ result }]] = await dataBaseConnection
+    .execute(`SELECT count(id) as result FROM StoreManager.products WHERE id IN (${arrayOfIds
+      .join(', ')});`);
+  return result === arrayOfIds.length;
+};
+
 const createProduct = async (name) => {
   const [{ insertId }] = await dataBaseConnection
     .execute('INSERT INTO StoreManager.products (name) VALUES (?)', [name]);
@@ -21,4 +28,5 @@ module.exports = {
   searchAllProducts,
   searchByProductId,
   createProduct,
+  verifyIds,
 };
