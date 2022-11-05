@@ -52,7 +52,30 @@ describe('Testes de unidade do service de products', function () {
     const result = await services.createNewProduct(newProductName);
 
     expect(result).to.deep.equal(newProduct)
-  })
+  });
+
+  it('Deve lançar um erro caso não encontre o id', async () => {
+    sinon.stub(models, 'updateProductById').resolves(0);
+
+    try {
+      await services.updateProductById(999);
+    } catch (err) {
+      expect(err.type).to.equal('NOT_FOUND');
+      expect(err.message).to.equal('Product not found');
+      expect(models.updateProductById).to.have.been.calledWith(999);
+    }
+
+  });
+
+  it('Deve retornar um objeto com com o id e o novo nome atualizado', async () => {
+    sinon.stub(models, 'updateProductById').resolves(1);
+
+    const result = await services.updateProductById(10, 'martelo');
+
+    expect(result).to.be.deep.equal({id: 10, name: 'martelo'});
+    expect(models.updateProductById).to.have.been.calledWith(10, 'martelo');
+
+  });
 
   afterEach(sinon.restore);
 });

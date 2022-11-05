@@ -36,10 +36,10 @@ describe('Testes de unidade do model de products', function () {
     expect(result).to.equal(4);
   });
 
-    it('Realizando a verificação da existência de um array de ids no banco', async () => {
+  it('Realizando a verificação da existência de um array de ids no banco', async () => {
     sinon.stub(connection, 'execute')
       .onFirstCall().resolves([[{ result: 3 }]])
-      .onSecondCall().resolves([[{ result: 2}]]);
+      .onSecondCall().resolves([[{ result: 2 }]]);
 
     const result = await models.verifyIds([1, 2, 3]);
 
@@ -48,6 +48,20 @@ describe('Testes de unidade do model de products', function () {
     const result2 = await models.verifyIds([1, 2, 3]);
 
     expect(result2).to.be.false;
+  });
+
+  it('Deve atualizar um produto no banco de dados', async () => {
+    sinon.stub(connection, 'execute')
+      .onFirstCall().resolves([{ changedRows: 1 }])
+      .onSecondCall().resolves([{ changedRows: 0 }]);
+
+    const result = await models.updateProductById(9999);
+
+    expect(result).to.be.equal(1);
+
+    const result2 = await models.updateProductById(9999);
+
+    expect(result2).to.be.equal(0);
   })
 
   afterEach(sinon.restore);

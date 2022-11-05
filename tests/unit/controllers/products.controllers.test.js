@@ -71,5 +71,28 @@ describe('Testes de unidade do controller de products', function () {
     expect(res.json).to.have.been.calledWith(newProduct);
   });
 
+  it('Deve responder com o objeto do produto alterado e status code 200', async () => {
+    const req = {
+      params: {
+        id: 4,
+      },
+      body: {
+        name: 'new name',
+      }
+    };
+    const res = {};
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+
+    sinon.stub(services, 'updateProductById').resolves({ id: req.params.id, name: req.body.name });
+
+    await controllers.updateProduct(req, res);
+
+    expect(services.updateProductById).to.have.been.calledWith( 4, 'new name' );
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith({id: 4, name: 'new name'});
+  })
+
   afterEach(sinon.restore);
 });
