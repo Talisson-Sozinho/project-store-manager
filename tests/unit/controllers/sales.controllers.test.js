@@ -9,100 +9,117 @@ const services = require('../../../src/services');
 const controllers = require('../../../src/controllers');
 const { salesServiceReturn, salesServiceResponse, salesId1, updatedSalesResponse } = require('./mocks/sales.mock');
 
-describe('Testes de unidade do controller de products', function () {
-  it('Deve enviar como response array de todos os produtos', async function () {
-    const res = {};
-    const req = {
-      body: salesServiceReturn.itemsSold,
-    };
+describe('Testes de unidade do controller de sales', function () {
+  describe('01 - Teste do método "newSales"', () => {
+    it('- Deve enviar como response array de todos os produtos', async function () {
+      const res = {};
+      const req = {
+        body: salesServiceReturn.itemsSold,
+      };
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
 
-    sinon.stub(services, 'createNewSales').resolves(salesServiceReturn);
+      sinon.stub(services, 'createNewSales').resolves(salesServiceReturn);
 
-    await controllers.newSales(req, res);
+      await controllers.newSales(req, res);
 
-    expect(services.createNewSales).to.have.been.calledWith(req.body);
-    expect(res.status).to.have.been.calledWith(201);
-    expect(res.json).to.have.been.calledWith(salesServiceReturn);
+      expect(services.createNewSales).to.have.been.calledWith(req.body);
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith(salesServiceReturn);
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve responder com uma listagem de todas as vendas', async () => {
-    const req = {};
-    const res = {};
+  describe('02 - Teste do método "allSales"', () => {
+    it('- Deve responder com uma listagem de todas as vendas', async () => {
+      const req = {};
+      const res = {};
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
 
-    sinon.stub(services, 'getAllSales').resolves(salesServiceResponse);
+      sinon.stub(services, 'getAllSales').resolves(salesServiceResponse);
 
-    await controllers.allSales(req, res);
+      await controllers.allSales(req, res);
 
-    expect(services.getAllSales).to.have.been.called;
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(salesServiceResponse);
+      expect(services.getAllSales).to.have.been.called;
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(salesServiceResponse);
 
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve responder com com a listagem de uma venda específica', async () => {
-    const req = {
-      params: {
-        id: 1,
+  describe('03 - Teste do método "salesById"', () => {
+    it('- Deve responder com com a listagem de uma venda específica', async () => {
+      const req = {
+        params: {
+          id: 1,
+        }
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(services, 'getSalesById').resolves(salesId1);
+
+      await controllers.salesById(req, res);
+
+      expect(services.getSalesById).to.have.been.calledWith(req.params.id);
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(salesId1);
+    });
+
+    afterEach(sinon.restore);
+  });
+
+  describe('04 - Teste do método "removeSalesById"', () => {
+    it('- Deve responder 204 caso a venda tenha sido removido', async () => {
+      const req = {
+        params: {
+          id: 9999,
+        }
       }
-    };
-    const res = {};
+      const res = {}
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+      res.sendStatus = sinon.stub().returns(res);
 
-    sinon.stub(services, 'getSalesById').resolves(salesId1);
+      sinon.stub(services, 'removeSalesById').resolves(undefined);
 
-    await controllers.salesById(req, res);
+      await controllers.removeSalesById(req, res);
 
-    expect(services.getSalesById).to.have.been.calledWith(req.params.id);
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(salesId1);
+      expect(res.sendStatus).to.have.been.calledWith(204);
+      expect(services.removeSalesById).to.have.been.calledWith(9999);
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve responder 204 caso a venda tenha sido removido', async () => {
-
-    const req = {
-      params: {
-        id: 9999,
+  describe('05 - Teste do método "updateSalesById"', () => {
+    it('- Deve responder com o code 200 caso a venda tenha sido atualizada e um objeto com o id da venda e os produtos que foram atualizados', async () => {
+      const req = {
+        params: {
+          id: 9999,
+        },
+        body: updatedSalesResponse.itemsUpdated,
       }
-    }
-    const res = {}
+      const res = {}
 
-    res.sendStatus = sinon.stub().returns(res);
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
 
-    sinon.stub(services, 'removeSalesById').resolves(undefined);
+      sinon.stub(services, 'updateSalesById').resolves(updatedSalesResponse);
 
-    await controllers.removeSalesById(req, res);
+      await controllers.updateSalesById(req, res);
 
-    expect(res.sendStatus).to.have.been.calledWith(204);
-    expect(services.removeSalesById).to.have.been.calledWith(9999);
+      expect(res.status).to.have.been.calledWith(200);
+      expect(services.updateSalesById).to.have.been.calledWith(req.params.id, req.body);
+    });
+
+    afterEach(sinon.restore);
   });
-
-  it('Deve responder com o code 200 caso a venda tenha sido atualizada e um objeto com o id da venda e os produtos que foram atualizados', async () => {
-    const req = {
-      params: {
-        id: 9999,
-      },
-      body: updatedSalesResponse.itemsUpdated,
-    }
-    const res = {}
-
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
-
-    sinon.stub(services, 'updateSalesById').resolves(updatedSalesResponse);
-
-    await controllers.updateSalesById(req, res);
-
-    expect(res.status).to.have.been.calledWith(200);
-    expect(services.updateSalesById).to.have.been.calledWith(req.params.id, req.body);
-  });
-
-  afterEach(sinon.restore);
 });

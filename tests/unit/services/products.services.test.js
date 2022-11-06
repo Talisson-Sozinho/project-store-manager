@@ -12,100 +12,121 @@ const services = require('../../../src/services');
 const { products } = require('./mocks/products.mock');
 
 describe('Testes de unidade do service de products', function () {
-  it('Deve retornar a listagem de todos os produtos', async function () {
-    sinon.stub(models, 'searchAllProducts').resolves(products);
+  describe('01 - Teste do método "getAllProducts"', () => {
+    it('- Deve retornar a listagem de todos os produtos', async function () {
+      sinon.stub(models, 'searchAllProducts').resolves(products);
 
-    const result = await services.getAllProducts();
+      const result = await services.getAllProducts();
 
-    expect(result).to.be.deep.equal(products);
+      expect(result).to.be.deep.equal(products);
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve retornar o produto caso o id exista no bando de dados', async function () {
-    sinon.stub(models, 'searchByProductId').resolves(products[1]);
+  describe('02 - Teste do método "getProductById"', () => {
+    it('- Deve retornar o produto caso o id exista no bando de dados', async function () {
+      sinon.stub(models, 'searchByProductId').resolves(products[1]);
 
-    const result = await services.getProductById(2);
+      const result = await services.getProductById(2);
 
-    expect(result).to.equal(products[1]);
+      expect(result).to.equal(products[1]);
+    });
+
+    it('- Deve lançar um error caso o id não exista no bando de dados', async function () {
+      sinon.stub(models, 'searchByProductId').resolves(undefined);
+
+      try {
+        await services.getProductById(2);
+      } catch (err) {
+        expect(err.type).to.equal('NOT_FOUND');
+        expect(err.message).to.equal('Product not found');
+        expect(models.searchByProductId).to.have.been.calledWith(2);
+      }
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve lançar um error caso o id não exista no bando de dados', async function () {
-    sinon.stub(models, 'searchByProductId').resolves(undefined);
+  describe('03 - Teste do método "createNewProduct"', () => {
+    it('- Deve retornar um objeto com o nome e id do produto inserido', async function () {
+      sinon.stub(models, 'createProduct').resolves(4);
+      const newProductName = 'new product';
+      const newProduct = {
+        id: 4,
+        name: newProductName,
+      }
 
-    try {
-      await services.getProductById(2);
-    } catch (err) {
-      expect(err.type).to.equal('NOT_FOUND');
-      expect(err.message).to.equal('Product not found');
-      expect(models.searchByProductId).to.have.been.calledWith(2);
-    }
+      const result = await services.createNewProduct(newProductName);
 
+      expect(result).to.deep.equal(newProduct)
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve retornar um objeto com o nome e id do produto inserido', async function () {
-    sinon.stub(models, 'createProduct').resolves(4);
-    const newProductName = 'new product';
-    const newProduct = {
-      id: 4,
-      name: newProductName,
-    }
+  describe('04 - Teste do método "updateProductById"', () => {
+    it('- Deve lançar um erro caso não encontre o id', async () => {
+      sinon.stub(models, 'updateProductById').resolves(0);
 
-    const result = await services.createNewProduct(newProductName);
+      try {
+        await services.updateProductById(999);
+      } catch (err) {
+        expect(err.type).to.equal('NOT_FOUND');
+        expect(err.message).to.equal('Product not found');
+        expect(models.updateProductById).to.have.been.calledWith(999);
+      }
 
-    expect(result).to.deep.equal(newProduct)
+    });
+
+    it('- Deve retornar um objeto com com o id e o novo nome atualizado', async () => {
+      sinon.stub(models, 'updateProductById').resolves(1);
+
+      const result = await services.updateProductById(10, 'martelo');
+
+      expect(result).to.be.deep.equal({ id: 10, name: 'martelo' });
+      expect(models.updateProductById).to.have.been.calledWith(10, 'martelo');
+
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve lançar um erro caso não encontre o id', async () => {
-    sinon.stub(models, 'updateProductById').resolves(0);
+  describe('05 - Teste do método "removeProductById"', () => {
+    it('- Deve lançar um erro caso não tenha removido produto nenhum pois não foi encontrado no banco de dados', async () => {
+      sinon.stub(models, 'removeProductById').returns(0);
 
-    try {
-      await services.updateProductById(999);
-    } catch (err) {
-      expect(err.type).to.equal('NOT_FOUND');
-      expect(err.message).to.equal('Product not found');
-      expect(models.updateProductById).to.have.been.calledWith(999);
-    }
+      try {
+        await services.removeProductById(9999);
+      } catch (err) {
+        expect(err.type).to.equal('NOT_FOUND');
+        expect(err.message).to.equal('Product not found');
+        expect(models.removeProductById).to.have.been.calledWith(9999);
+      }
+    });
 
+    it('- Não deve lançar nada e apenas retornar undefined quando remover o produto normalmente', async () => {
+      sinon.stub(models, 'removeProductById').returns(1);
+
+      expect(await services.removeProductById(999)).not.throw;
+      expect(models.removeProductById).to.have.been.calledWith(999);
+
+    });
+
+    afterEach(sinon.restore);
   });
 
-  it('Deve retornar um objeto com com o id e o novo nome atualizado', async () => {
-    sinon.stub(models, 'updateProductById').resolves(1);
+  describe('06 - Teste do método "searchProductsByName"', () => {
+    it('- Deve retornar um array com os produtos que tem o termo pesquisado', async () => {
+      sinon.stub(models, 'searchProductsByName').resolves(products);
 
-    const result = await services.updateProductById(10, 'martelo');
+      const result = await services.searchProductsByName('randomName');
 
-    expect(result).to.be.deep.equal({id: 10, name: 'martelo'});
-    expect(models.updateProductById).to.have.been.calledWith(10, 'martelo');
+      expect(result).to.deep.equal(products);
+      expect(models.searchProductsByName).to.have.been.calledWith('randomName');
 
+    });
+
+    afterEach(sinon.restore);
   });
-
-  it('Deve lançar um erro caso não tenha removido produto nenhum pois não foi encontrado no banco de dados', async () => {
-    sinon.stub(models, 'removeProductById').returns(0);
-
-    try {
-      await services.removeProductById(9999);
-    } catch (err) {
-      expect(err.type).to.equal('NOT_FOUND');
-      expect(err.message).to.equal('Product not found');
-      expect(models.removeProductById).to.have.been.calledWith(9999);
-    }
-  });
-
-  it('Não deve lançar nada e apenas retornar undefined quando remover o produto normalmente', async () => {
-    sinon.stub(models, 'removeProductById').returns(1);
-
-    expect(await services.removeProductById(999)).not.throw;
-    expect(models.removeProductById).to.have.been.calledWith(999);
-
-  });
-
-  it('Deve retornar um array com os produtos que tem o termo pesquisado', async () => {
-    sinon.stub(models, 'searchProductsByName').resolves(products);
-
-    const result = await services.searchProductsByName('randomName');
-
-    expect(result).to.deep.equal(products);
-    expect(models.searchProductsByName).to.have.been.calledWith('randomName');
-
-  });
-
-  afterEach(sinon.restore);
 });
