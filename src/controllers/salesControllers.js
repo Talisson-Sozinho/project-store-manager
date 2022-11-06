@@ -24,9 +24,16 @@ const removeSalesById = async (req, res) => {
   return res.sendStatus(204);
 };
 
+const updateSalesById = async (req, res) => {
+  const { params: { id }, body } = req;
+  const result = await services.updateSalesById(id, body);
+  return res.status(200).json(result);
+};
+
 module.exports = {
   newSales,
   allSales,
   salesById,
   removeSalesById,
+  updateSalesById,
 };

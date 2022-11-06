@@ -46,10 +46,21 @@ const removeSalesById = async (id) => {
   return affectedRows;
 };
 
+const updateSalesById = async (id, productId, quantity) => {
+  const [{ affectedRows }] = await dataBaseConnection.execute(`
+    UPDATE StoreManager.sales_products
+    SET quantity = ?
+    WHERE sale_id = ? AND product_id = ?
+  `, [quantity, id, productId]);
+
+  return { affectedRows };
+};
+
 module.exports = {
   registerSale,
   createSalesProduct,
   getAllSales,
   getSalesById,
   removeSalesById,
+  updateSalesById,
 };

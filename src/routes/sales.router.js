@@ -12,6 +12,8 @@ router.delete('/:id', controllers.removeSalesById);
 
 router.use(validateBodySales);
 
+router.put('/:id', controllers.updateSalesById);
+
 router.post('/', controllers.newSales);
 
 module.exports = router;

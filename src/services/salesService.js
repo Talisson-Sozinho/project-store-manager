@@ -42,9 +42,29 @@ const removeSalesById = async (id) => {
   if (!result) throw errorObject(NOT_FOUND, 'Sale not found');
 };
 
+const updateSalesById = async (id, arrayOfSalesForUpdate) => {
+  const idsForVerification = arrayOfSalesForUpdate.map(({ productId }) => productId);
+
+  const result = await models.verifyIds(idsForVerification);
+  if (!result) throw errorObject(NOT_FOUND, 'Product not found');
+
+  const sales = await models.getSalesById(id);
+  if (sales.length === 0) throw errorObject(NOT_FOUND, 'Sale not found');
+
+  await arrayOfSalesForUpdate.forEach(({ productId, quantity }) => (
+    models.updateSalesById(id, productId, quantity)
+  ));
+
+  return {
+    saleId: id,
+    itemsUpdated: arrayOfSalesForUpdate,
+  };
+};
+
 module.exports = {
   createNewSales,
   getAllSales,
   getSalesById,
   removeSalesById,
+  updateSalesById,
 };
