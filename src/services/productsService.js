@@ -28,9 +28,16 @@ const updateProductById = async (id, newName) => {
   };
 };
 
+const removeProductById = async (id) => {
+  const result = await models.removeProductById(id);
+
+  if (!result) throw errorObject(NOT_FOUND, 'Product not found');
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   createNewProduct,
   updateProductById,
+  removeProductById,
 };

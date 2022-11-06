@@ -4,6 +4,7 @@ const {
   createProduct,
   verifyIds,
   updateProductById,
+  removeProductById,
 } = require('./productModels');
 
 const { registerSale, createSalesProduct, getAllSales, getSalesById } = require('./salesModels');
@@ -14,6 +15,7 @@ module.exports = {
   searchByProductId,
   createProduct,
   updateProductById,
+  removeProductById,
   registerSale,
   createSalesProduct,
   getAllSales,

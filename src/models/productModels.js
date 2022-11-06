@@ -33,10 +33,19 @@ const updateProductById = async (id, newName) => {
   return changedRows;
 };
 
+const removeProductById = async (id) => {
+  const [{ affectedRows }] = await dataBaseConnection.execute(
+    'DELETE FROM StoreManager.products WHERE id = (?);',
+    [id],
+  );
+  return affectedRows;
+};
+
 module.exports = {
   searchAllProducts,
   searchByProductId,
   createProduct,
   updateProductById,
+  removeProductById,
   verifyIds,
 };

@@ -62,7 +62,21 @@ describe('Testes de unidade do model de products', function () {
     const result2 = await models.updateProductById(9999);
 
     expect(result2).to.be.equal(0);
-  })
+  });
+
+  it('Deve deletar um produto dado um id, e retornar as linhas afetadas', async () => {
+    sinon.stub(connection, 'execute')
+      .onFirstCall().resolves([{ affectedRows: 1 }])
+      .onSecondCall().resolves([{ affectedRows: 0 }]);
+
+    const result = await models.removeProductById(9999);
+
+    expect(result).to.be.equal(1);
+
+    const result2 = await models.removeProductById(9999);
+
+    expect(result2).to.be.equal(0);
+  });
 
   afterEach(sinon.restore);
 });

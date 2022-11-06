@@ -89,9 +89,28 @@ describe('Testes de unidade do controller de products', function () {
 
     await controllers.updateProduct(req, res);
 
-    expect(services.updateProductById).to.have.been.calledWith( 4, 'new name' );
+    expect(services.updateProductById).to.have.been.calledWith(4, 'new name');
     expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith({id: 4, name: 'new name'});
+    expect(res.json).to.have.been.calledWith({ id: 4, name: 'new name' });
+  });
+
+  it('Deve responder 204 caso o produto tenha sido removido', async () => {
+
+    const req = {
+      params: {
+        id: 9999,
+      }
+    }
+    const res = {}
+
+    res.sendStatus = sinon.stub().returns(res);
+
+    sinon.stub(services, 'removeProductById').resolves(undefined);
+
+    await controllers.removeProductById(req, res);
+
+    expect(res.sendStatus).to.have.been.calledWith(204);
+    expect(services.removeProductById).to.have.been.calledWith(9999);
   })
 
   afterEach(sinon.restore);

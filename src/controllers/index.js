@@ -3,6 +3,7 @@ const {
   productsById,
   createNewProduct,
   updateProduct,
+  removeProductById,
 } = require('./productsControllers');
 
 const { newSales, allSales, salesById } = require('./salesControllers');
@@ -12,6 +13,7 @@ module.exports = {
   productsById,
   createNewProduct,
   updateProduct,
+  removeProductById,
   newSales,
   allSales,
   salesById,

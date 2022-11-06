@@ -77,5 +77,25 @@ describe('Testes de unidade do service de products', function () {
 
   });
 
+  it('Deve lançar um erro caso não tenha removido produto nenhum pois não foi encontrado no banco de dados', async () => {
+    sinon.stub(models, 'removeProductById').returns(0);
+
+    try {
+      await services.removeProductById(9999);
+    } catch (err) {
+      expect(err.type).to.equal('NOT_FOUND');
+      expect(err.message).to.equal('Product not found');
+      expect(models.removeProductById).to.have.been.calledWith(9999);
+    }
+  });
+
+  it('Não deve lançar nada e apenas retornar undefined quando remover o produto normalmente', async () => {
+    sinon.stub(models, 'removeProductById').returns(1);
+
+    expect(await services.removeProductById(999)).not.throw;
+    expect(models.removeProductById).to.have.been.calledWith(999);
+
+  })
+
   afterEach(sinon.restore);
 });
