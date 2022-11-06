@@ -95,7 +95,17 @@ describe('Testes de unidade do service de products', function () {
     expect(await services.removeProductById(999)).not.throw;
     expect(models.removeProductById).to.have.been.calledWith(999);
 
-  })
+  });
+
+  it('Deve retornar um array com os produtos que tem o termo pesquisado', async () => {
+    sinon.stub(models, 'searchProductsByName').resolves(products);
+
+    const result = await services.searchProductsByName('randomName');
+
+    expect(result).to.deep.equal(products);
+    expect(models.searchProductsByName).to.have.been.calledWith('randomName');
+
+  });
 
   afterEach(sinon.restore);
 });

@@ -45,7 +45,6 @@ const searchProductsByName = async (name) => {
   const [result] = await dataBaseConnection.execute(`
     SELECT * FROM StoreManager.products
     WHERE name LIKE '${name}%';`);
-  console.log(result);
   return result;
 };
 

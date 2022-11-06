@@ -95,7 +95,6 @@ describe('Testes de unidade do controller de products', function () {
   });
 
   it('Deve responder 204 caso o produto tenha sido removido', async () => {
-
     const req = {
       params: {
         id: 9999,
@@ -111,7 +110,28 @@ describe('Testes de unidade do controller de products', function () {
 
     expect(res.sendStatus).to.have.been.calledWith(204);
     expect(services.removeProductById).to.have.been.calledWith(9999);
-  })
+  });
+
+  it('Deve responder com a lista de produtos retornado do service e o code 200', async () => {
+    const req = {
+      query: {
+        q: 'randomTerm'
+      }
+    };
+    const res = {};
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+
+    sinon.stub(services, 'searchProductsByName').resolves(products);
+
+    await controllers.searchProductsByName(req, res);
+
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith(products);
+    expect(services.searchProductsByName).to.have.been.calledWith(req.query.q);
+
+    });
 
   afterEach(sinon.restore);
 });

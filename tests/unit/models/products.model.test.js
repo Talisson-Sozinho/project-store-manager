@@ -78,5 +78,13 @@ describe('Testes de unidade do model de products', function () {
     expect(result2).to.be.equal(0);
   });
 
+  it('Deve retornar um array com os produtos que está sendo pesquisado', async () => {
+    sinon.stub(connection, 'execute').resolves([products]);
+
+    const result = await models.searchProductsByName('randomName');
+
+    expect(result).to.deep.equal(products);
+  });
+
   afterEach(sinon.restore);
 });
