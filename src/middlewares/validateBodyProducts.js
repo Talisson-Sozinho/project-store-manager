@@ -4,12 +4,12 @@ module.exports = (req, _res, next) => {
   const { name } = req.body;
   if (!name) {
     const err = errorObject(BAD_REQUEST, '"name" is required');
-    next(err);
+    return next(err);
   }
   if (name.length < 5) {
     const err = errorObject(UNPROCESSABLE_ENTITY,
       '"name" length must be at least 5 characters long');
-    next(err);
+    return next(err);
   }
-  next();
+  return next();
 };

@@ -6,17 +6,17 @@ module.exports = (req, _res, next) => {
   body.forEach(({ productId, quantity }) => {
     if (productId === undefined) {
       const err = errorObject(BAD_REQUEST, '"productId" is required');
-      next(err);
+      return next(err);
     }
     if (quantity === undefined) {
       const err = errorObject(BAD_REQUEST, '"quantity" is required');
-      next(err);
+      return next(err);
     }
     if (quantity < 1) {
       const err = errorObject(UNPROCESSABLE_ENTITY,
         '"quantity" must be greater than or equal to 1');
-      next(err);
+      return next(err);
     }
   });
-  next();
+  return next();
 };
