@@ -52,7 +52,21 @@ describe('Testes de unidade do model de sales', () => {
     const result = await models.getSalesById(1);
 
     expect(result).to.be.deep.equal(salesId1);
-  })
+  });
+
+    it('Deve deletar a venda dado um id, e retornar as linhas afetadas', async () => {
+    sinon.stub(connection, 'execute')
+      .onFirstCall().resolves([{ affectedRows: 1 }])
+      .onSecondCall().resolves([{ affectedRows: 0 }]);
+
+    const result = await models.removeSalesById(9999);
+
+    expect(result).to.be.equal(1);
+
+    const result2 = await models.removeSalesById(9999);
+
+    expect(result2).to.be.equal(0);
+  });
 
   afterEach(sinon.restore);
 });

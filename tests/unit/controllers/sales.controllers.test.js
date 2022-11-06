@@ -65,5 +65,24 @@ describe('Testes de unidade do controller de products', function () {
     expect(res.json).to.have.been.calledWith(salesId1);
   });
 
+    it('Deve responder 204 caso a venda tenha sido removido', async () => {
+
+    const req = {
+      params: {
+        id: 9999,
+      }
+    }
+    const res = {}
+
+    res.sendStatus = sinon.stub().returns(res);
+
+    sinon.stub(services, 'removeSalesById').resolves(undefined);
+
+    await controllers.removeSalesById(req, res);
+
+    expect(res.sendStatus).to.have.been.calledWith(204);
+    expect(services.removeSalesById).to.have.been.calledWith(9999);
+  })
+
   afterEach(sinon.restore);
 });

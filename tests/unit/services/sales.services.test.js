@@ -71,5 +71,25 @@ describe('Testes de unidade do service de sales', function () {
     expect(models.getSalesById).to.have.been.calledWith(idForSearch);
   });
 
+    it('Deve lançar um erro caso não tenha removido a venda não foi encontrado no banco de dados', async () => {
+    sinon.stub(models, 'removeSalesById').returns(0);
+
+    try {
+      await services.removeSalesById(9999);
+    } catch (err) {
+      expect(err.type).to.equal('NOT_FOUND');
+      expect(err.message).to.equal('Sale not found');
+      expect(models.removeSalesById).to.have.been.calledWith(9999);
+    }
+  });
+
+  it('Não deve lançar nada e apenas retornar undefined quando remover a venda normalmente', async () => {
+    sinon.stub(models, 'removeSalesById').returns(1);
+
+    expect(await services.removeSalesById(999)).not.throw;
+    expect(models.removeSalesById).to.have.been.calledWith(999);
+
+  })
+
   afterEach(sinon.restore);
 });
