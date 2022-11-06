@@ -8,6 +8,8 @@ router.get('/', controllers.allSales);
 
 router.get('/:id', controllers.salesById);
 
+router.delete('/:id', controllers.removeSalesById);
+
 router.use(validateBodySales);
 
 router.post('/', controllers.newSales);

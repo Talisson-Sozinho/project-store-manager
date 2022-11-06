@@ -36,8 +36,15 @@ const getSalesById = async (id) => {
   return sales;
 };
 
+const removeSalesById = async (id) => {
+  const result = await models.removeSalesById(id);
+
+  if (!result) throw errorObject(NOT_FOUND, 'Sale not found');
+};
+
 module.exports = {
   createNewSales,
   getAllSales,
   getSalesById,
+  removeSalesById,
 };

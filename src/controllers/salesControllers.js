@@ -16,8 +16,17 @@ const salesById = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const removeSalesById = async (req, res) => {
+  const { id } = req.params;
+
+  await services.removeSalesById(id);
+
+  return res.sendStatus(204);
+};
+
 module.exports = {
   newSales,
   allSales,
   salesById,
+  removeSalesById,
 };

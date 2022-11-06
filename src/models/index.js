@@ -7,7 +7,13 @@ const {
   removeProductById,
 } = require('./productModels');
 
-const { registerSale, createSalesProduct, getAllSales, getSalesById } = require('./salesModels');
+const {
+  registerSale,
+  createSalesProduct,
+  getAllSales,
+  getSalesById,
+  removeSalesById,
+} = require('./salesModels');
 
 module.exports = {
   verifyIds,
@@ -20,4 +26,5 @@ module.exports = {
   createSalesProduct,
   getAllSales,
   getSalesById,
+  removeSalesById,
 };

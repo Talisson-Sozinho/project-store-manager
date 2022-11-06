@@ -6,7 +6,7 @@ const {
   removeProductById,
 } = require('./productsControllers');
 
-const { newSales, allSales, salesById } = require('./salesControllers');
+const { newSales, allSales, salesById, removeSalesById } = require('./salesControllers');
 
 module.exports = {
   allProducts,
@@ -17,4 +17,5 @@ module.exports = {
   newSales,
   allSales,
   salesById,
+  removeSalesById,
 };

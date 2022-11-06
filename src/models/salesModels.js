@@ -38,9 +38,18 @@ const getSalesById = async (id) => {
   return camelize(sales);
 };
 
+const removeSalesById = async (id) => {
+  const [{ affectedRows }] = await dataBaseConnection.execute(
+    'DELETE FROM StoreManager.sales WHERE id = (?);',
+    [id],
+  );
+  return affectedRows;
+};
+
 module.exports = {
   registerSale,
   createSalesProduct,
   getAllSales,
   getSalesById,
+  removeSalesById,
 };

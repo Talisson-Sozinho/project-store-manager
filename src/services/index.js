@@ -6,7 +6,7 @@ const {
   removeProductById,
 } = require('./productsService');
 
-const { createNewSales, getSalesById, getAllSales } = require('./salesService');
+const { createNewSales, getSalesById, getAllSales, removeSalesById } = require('./salesService');
 
 module.exports = {
   getAllProducts,
@@ -17,4 +17,5 @@ module.exports = {
   createNewSales,
   getSalesById,
   getAllSales,
+  removeSalesById,
 };
