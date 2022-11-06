@@ -7,7 +7,7 @@ chai.use(sinonChai);
 
 const services = require('../../../src/services');
 const controllers = require('../../../src/controllers');
-const { salesServiceReturn, salesServiceResponse, salesId1 } = require('./mocks/sales.mock');
+const { salesServiceReturn, salesServiceResponse, salesId1, updatedSalesResponse } = require('./mocks/sales.mock');
 
 describe('Testes de unidade do controller de products', function () {
   it('Deve enviar como response array de todos os produtos', async function () {
@@ -65,7 +65,7 @@ describe('Testes de unidade do controller de products', function () {
     expect(res.json).to.have.been.calledWith(salesId1);
   });
 
-    it('Deve responder 204 caso a venda tenha sido removido', async () => {
+  it('Deve responder 204 caso a venda tenha sido removido', async () => {
 
     const req = {
       params: {
@@ -82,7 +82,27 @@ describe('Testes de unidade do controller de products', function () {
 
     expect(res.sendStatus).to.have.been.calledWith(204);
     expect(services.removeSalesById).to.have.been.calledWith(9999);
-  })
+  });
+
+  it('Deve responder com o code 200 caso a venda tenha sido atualizada e um objeto com o id da venda e os produtos que foram atualizados', async () => {
+    const req = {
+      params: {
+        id: 9999,
+      },
+      body: updatedSalesResponse.itemsUpdated,
+    }
+    const res = {}
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+
+    sinon.stub(services, 'updateSalesById').resolves(updatedSalesResponse);
+
+    await controllers.updateSalesById(req, res);
+
+    expect(res.status).to.have.been.calledWith(200);
+    expect(services.updateSalesById).to.have.been.calledWith(req.params.id, req.body);
+  });
 
   afterEach(sinon.restore);
 });

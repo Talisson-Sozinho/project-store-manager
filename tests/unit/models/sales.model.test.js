@@ -54,7 +54,7 @@ describe('Testes de unidade do model de sales', () => {
     expect(result).to.be.deep.equal(salesId1);
   });
 
-    it('Deve deletar a venda dado um id, e retornar as linhas afetadas', async () => {
+  it('Deve deletar a venda dado um id, e retornar as linhas afetadas', async () => {
     sinon.stub(connection, 'execute')
       .onFirstCall().resolves([{ affectedRows: 1 }])
       .onSecondCall().resolves([{ affectedRows: 0 }]);
@@ -66,6 +66,25 @@ describe('Testes de unidade do model de sales', () => {
     const result2 = await models.removeSalesById(9999);
 
     expect(result2).to.be.equal(0);
+    });
+
+  it('Deve atualizar deve devolver a quantidade de linhas afetadas ao atualizar a venda', async () => {
+    sinon.stub(connection, 'execute')
+      .onFirstCall().resolves([{ affectedRows: 1 }])
+      .onSecondCall().resolves([{ affectedRows: 0 }]);
+
+    const saleId = 1;
+    const productId = 2;
+    const quantity = 3;
+
+    const result = await models.updateSalesById(saleId, productId, quantity);
+
+    expect(result).to.be.equal(1);
+
+    const result2 = await models.updateSalesById(saleId, productId, quantity);
+
+    expect(result2).to.be.equal(0);
+
   });
 
   afterEach(sinon.restore);

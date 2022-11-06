@@ -7,7 +7,7 @@ chai.use(sinonChai);
 
 const models = require('../../../src/models');
 const services = require('../../../src/services');
-const { arrayOfSales, salesModelResponse, salesId1 } = require('./mocks/sales.mock');
+const { arrayOfSales, salesModelResponse, salesId1, updatedSalesResponse } = require('./mocks/sales.mock');
 
 describe('Testes de unidade do service de sales', function () {
   it('Não deve cadastrar a venda caso não exista o id do produto no banco ', async function () {
@@ -71,7 +71,7 @@ describe('Testes de unidade do service de sales', function () {
     expect(models.getSalesById).to.have.been.calledWith(idForSearch);
   });
 
-    it('Deve lançar um erro caso não tenha removido a venda não foi encontrado no banco de dados', async () => {
+  it('Deve lançar um erro caso não tenha removido a venda não foi encontrado no banco de dados', async () => {
     sinon.stub(models, 'removeSalesById').returns(0);
 
     try {
@@ -89,7 +89,46 @@ describe('Testes de unidade do service de sales', function () {
     expect(await services.removeSalesById(999)).not.throw;
     expect(models.removeSalesById).to.have.been.calledWith(999);
 
-  })
+  });
+
+  it('Deve lançar um erro caso a venda não exista', async () => {
+    sinon.stub(models, 'getSalesById').resolves([]);
+
+    try {
+      await services.updateSalesById(9999, arrayOfSales);
+
+    } catch (err) {
+      expect(err.type).to.equal('NOT_FOUND');
+      expect(err.message).to.equal('Sale not found');
+      expect(models.getSalesById).to.have.been.calledWith(9999);
+    }
+  });
+
+  it('Deve lançar um erro caso algum produto não exista', async () => {
+    sinon.stub(models, 'getSalesById').resolves(salesId1);
+    sinon.stub(models, 'verifyIds').resolves(false);
+
+    try {
+      await services.updateSalesById(9999, arrayOfSales);
+
+    } catch (err) {
+      expect(err.type).to.equal('NOT_FOUND');
+      expect(err.message).to.equal('Product not found');
+      expect(models.getSalesById).to.have.been.calledWith(9999);
+    }
+  });
+
+  it('Deve retornar um objeto com o id da venda e os produtos atualizados', async () => {
+    sinon.stub(models, 'getSalesById').resolves(salesId1);
+    sinon.stub(models, 'verifyIds').resolves(true);
+    sinon.stub(models, 'updateSalesById').resolves(1);
+
+    const result = await services.updateSalesById(9999, arrayOfSales);
+
+    expect(result).to.deep.equal(updatedSalesResponse);
+
+  });
+
 
   afterEach(sinon.restore);
 });

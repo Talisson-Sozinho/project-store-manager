@@ -49,8 +49,27 @@ const salesId1 = [
   },
 ]
 
+const updatedSalesResponse = {
+  saleId: 9999,
+  itemsUpdated: [
+    {
+      productId: 1,
+      quantity: 1
+    },
+    {
+      productId: 2,
+      quantity: 5
+    },
+    {
+      productId: 3,
+      quantity: 4
+    }
+  ]
+};
+
 module.exports = {
   arrayOfSales,
   salesModelResponse,
   salesId1,
+  updatedSalesResponse,
 }

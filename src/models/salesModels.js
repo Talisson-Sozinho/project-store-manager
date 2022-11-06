@@ -53,7 +53,7 @@ const updateSalesById = async (id, productId, quantity) => {
     WHERE sale_id = ? AND product_id = ?
   `, [quantity, id, productId]);
 
-  return { affectedRows };
+  return affectedRows;
 };
 
 module.exports = {
