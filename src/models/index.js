@@ -5,6 +5,7 @@ const {
   verifyIds,
   updateProductById,
   removeProductById,
+  searchProductsByName,
 } = require('./productModels');
 
 const {
@@ -29,4 +30,5 @@ module.exports = {
   getSalesById,
   removeSalesById,
   updateSalesById,
+  searchProductsByName,
 };

@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get('/', controllers.allProducts);
 
+router.get('/search', controllers.searchProductsByName);
+
 router.get('/:id', controllers.productsById);
 
 router.delete('/:id', controllers.removeProductById);

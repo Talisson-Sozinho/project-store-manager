@@ -34,10 +34,16 @@ const removeProductById = async (id) => {
   if (!result) throw errorObject(NOT_FOUND, 'Product not found');
 };
 
+const searchProductsByName = async (name) => {
+  const result = await models.searchProductsByName(name);
+  return result;
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   createNewProduct,
   updateProductById,
   removeProductById,
+  searchProductsByName,
 };

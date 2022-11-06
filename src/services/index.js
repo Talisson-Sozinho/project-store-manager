@@ -4,6 +4,7 @@ const {
   createNewProduct,
   updateProductById,
   removeProductById,
+  searchProductsByName,
 } = require('./productsService');
 
 const {
@@ -25,4 +26,5 @@ module.exports = {
   getAllSales,
   removeSalesById,
   updateSalesById,
+  searchProductsByName,
 };

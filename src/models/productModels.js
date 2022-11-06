@@ -41,6 +41,14 @@ const removeProductById = async (id) => {
   return affectedRows;
 };
 
+const searchProductsByName = async (name) => {
+  const [result] = await dataBaseConnection.execute(`
+    SELECT * FROM StoreManager.products
+    WHERE name LIKE '${name}%';`);
+  console.log(result);
+  return result;
+};
+
 module.exports = {
   searchAllProducts,
   searchByProductId,
@@ -48,4 +56,5 @@ module.exports = {
   updateProductById,
   removeProductById,
   verifyIds,
+  searchProductsByName,
 };
